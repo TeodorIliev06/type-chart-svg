@@ -1,0 +1,30 @@
+{
+  "name": "typecharts-svg",
+  "version": "0.1.0",
+  "description": "A lightweight TypeScript library for generating SVG charts with no dependencies",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rimraf dist",
+    "dev": "tsc --watch"
+  },
+  "keywords": [
+    "svg",
+    "chart",
+    "typescript",
+    "visualization",
+    "dataviz"
+  ],
+  "author": "Teodor",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "rimraf": "^5.0.5"
+  }
+}
