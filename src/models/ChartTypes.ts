@@ -31,6 +31,13 @@ export interface AxialChartOptions extends ChartOptions {
   showGrid?: boolean;
 }
 
+export interface LineChartOptions extends AxialChartOptions {
+  lineWidth?: number;
+  showDots?: boolean;
+  dotRadius?: number;
+  fillArea?: boolean;
+}
+
 export interface Chart {
   render(): string;
 } 
