@@ -34,10 +34,7 @@ export class LineChart extends BaseChart {
       let svg = this.createSvgContainer();
       svg += this.renderTitle();
   
-      // Create main chart group
-      svg += createGroup({
-        transform: `translate(${x}, ${y})`
-      });
+      let groupContent = '';
   
       // Draw lines between points
       for (let i = 0; i < this.data.length - 1; i++) {
@@ -46,7 +43,7 @@ export class LineChart extends BaseChart {
         const x2 = mapRange(this.data[i + 1].x, xMin, xMax, 0, width);
         const y2 = mapRange(this.data[i + 1].y, yMin, yMax, height, 0);
   
-        svg += createLine(x1, y1, x2, y2, {
+        groupContent += createLine(x1, y1, x2, y2, {
           stroke: this.options.colors?.[0] || '#000',
           'stroke-width': this.options.lineWidth || 2
         });
@@ -57,13 +54,17 @@ export class LineChart extends BaseChart {
           const cx = mapRange(point.x, xMin, xMax, 0, width);
           const cy = mapRange(point.y, yMin, yMax, height, 0);
           
-          svg += createCircle(cx, cy, this.options.dotRadius || 4, {
+          groupContent += createCircle(cx, cy, this.options.dotRadius || 4, {
             fill: this.options.colors?.[0] || '#000'
           });
         });
       }
   
-      svg += '</g>';
+      // Create main chart group with content
+      svg += createGroup({
+        transform: `translate(${x}, ${y})`
+      }, groupContent);
+  
       svg += '</svg>';
   
       return svg;
