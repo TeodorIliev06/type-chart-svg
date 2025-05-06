@@ -11,6 +11,6 @@
     "noEmit": false,
     "composite": false
   },
-  "include": ["*.ts"],
+  "include": ["../**/*.ts"],
   "exclude": ["node_modules"]
 }
