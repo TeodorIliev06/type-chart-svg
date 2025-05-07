@@ -13,6 +13,49 @@ export function findMinMax(values: number[]): { min: number; max: number } {
 }
 
 /**
+ * Calculates round values for axis ticks
+ */
+export function calculateTicks(
+  min: number,
+  max: number,
+  targetTickCount: number
+): number[] {
+  if (min === max) {
+    return [min];
+  }
+  
+  const range = max - min;
+  const rawStep = range / (targetTickCount - 1);
+  
+  // Round to a nice step size
+  const magnitude = Math.pow(10, Math.floor(Math.log10(rawStep)));
+  const normalizedStep = rawStep / magnitude;
+  
+  let niceStep;
+  if (normalizedStep < 1.5) {
+    niceStep = 1;
+  } else if (normalizedStep < 3) {
+    niceStep = 2;
+  } else if (normalizedStep < 7) {
+    niceStep = 5;
+  } else {
+    niceStep = 10;
+  }
+  niceStep *= magnitude;
+  
+  const niceMin = Math.floor(min / niceStep) * niceStep;
+  const niceMax = Math.ceil(max / niceStep) * niceStep;
+  
+  const ticks = [];
+  for (let tick = niceMin; tick <= niceMax + 0.5 * niceStep; tick += niceStep) {
+    // Add a small epsilon and round to avoid floating point errors
+    ticks.push(Math.round((tick + Number.EPSILON) * 1000) / 1000);
+  }
+  
+  return ticks;
+}
+
+/**
  * Maps a value from one range to another
  */
 export function mapRange(
