@@ -1,4 +1,16 @@
 /**
+ * Escapes special characters in text for safe use in SVG
+ */
+export function escapeText(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+/**
  * Creates an SVG element with the given attributes
  */
 export function createSvgElement(
@@ -45,7 +57,7 @@ export function createText(
   text: string,
   attributes: Record<string, string | number> = {}
 ): string {
-  return createSvgElement('text', { x, y, ...attributes });
+  return createSvgElement('text', { x, y, ...attributes }, escapeText(text));
 }
 
 /**

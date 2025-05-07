@@ -73,3 +73,22 @@ export function mapRange(
   return toMin + ratio * (toMax - toMin);
 }
 
+/**
+ * Formats a number for display on charts
+ */
+export function formatNumber(num: number): string {
+  // For small numbers, show as is with up to 2 decimal places
+  if (Math.abs(num) < 1000) {
+    return num.toFixed(Math.abs(num) < 10 ? 1 : 0);
+  }
+  
+  if (Math.abs(num) < 1000000) {
+    return (num / 1000).toFixed(1) + 'k';
+  }
+  
+  if (Math.abs(num) < 1000000000) {
+    return (num / 1000000).toFixed(1) + 'M';
+  }
+  
+  return (num / 1000000000).toFixed(1) + 'B';
+}

@@ -38,6 +38,13 @@ export class LineChart extends BaseChart<LineChartOptions, XYDataPoint> {
   ): string {
     let axesContent = "";
 
+    const margin = this.options.margin || {
+      top: 40,
+      right: 30,
+      bottom: 50,
+      left: 50,
+    };
+
     const xTicks = calculateTicks(xMin, xMax, 5);
     const yTicks = calculateTicks(yMin, yMax, this.options.yAxisTicks || 5);
 
@@ -53,23 +60,60 @@ export class LineChart extends BaseChart<LineChartOptions, XYDataPoint> {
       "stroke-width": 1,
     });
 
+    // Draw X axis ticks and labels
     xTicks.forEach((tick) => {
       const x = mapRange(tick, xMin, xMax, 0, width);
-      // Tick line
       axesContent += createLine(x, height, x, height + 5, {
         stroke: "#000",
         "stroke-width": 1,
       });
+      axesContent += createText(x, height + 20, formatNumber(tick), {
+        "text-anchor": "middle",
+        "font-size": "12",
+      });
     });
 
+    // Draw Y axis ticks and labels
     yTicks.forEach((tick) => {
       const y = mapRange(tick, yMin, yMax, height, 0);
-      // Tick line
       axesContent += createLine(-5, y, 0, y, {
         stroke: "#000",
         "stroke-width": 1,
       });
+      axesContent += createText(-10, y + 4, formatNumber(tick), {
+        "text-anchor": "end",
+        "font-size": "12",
+      });
     });
+
+    // Draw axis labels if provided
+    if (this.options.xAxisLabel) {
+      axesContent += createText(
+        width / 2,
+        height + margin.bottom / 1.5,
+        this.options.xAxisLabel,
+        {
+          "text-anchor": "middle",
+          "font-size": "14",
+        }
+      );
+    }
+
+    if (this.options.yAxisLabel) {
+      axesContent += createText(
+        -margin.left / 2,
+        height / 2,
+        this.options.yAxisLabel,
+        {
+          "text-anchor": "middle",
+          "font-size": "14",
+          transform: `rotate(-90 ${-margin.left / 2} ${height / 2})`,
+        }
+      );
+    }
+
+    return axesContent;
+  }
 
   private renderGrid(
     xMin: number,

@@ -37,6 +37,19 @@ body {
     fill: #333;
 }
 
+/* Style for axis labels */
+.chart-container text[text-anchor="middle"]:not([font-weight="bold"]) {
+    font-size: 14px;
+    fill: #666;
+}
+
+/* Style for tick labels */
+.chart-container text[text-anchor="end"],
+.chart-container text[text-anchor="middle"] {
+    font-size: 12px;
+    fill: #666;
+}
+
 button {
     padding: 12px 24px;
     background-color: #2196F3;

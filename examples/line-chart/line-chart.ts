@@ -21,6 +21,8 @@ const options = {
     height: 500,
     margin: { top: 50, right: 50, bottom: 60, left: 60 },
     title: 'Sample Line Chart',
+    xAxisLabel: 'Time (hours)',
+    yAxisLabel: 'Value',
     showGrid: true,
     yAxisTicks: 6,
     lineWidth: 2.5,
