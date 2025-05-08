@@ -1,10 +1,4 @@
-import {
-  Chart,
-  ChartOptions,
-  BaseDataPoint,
-  DEFAULT_MARGIN,
-  Margin,
-} from "../models/ChartTypes";
+import { Chart, ChartOptions, DEFAULT_MARGIN } from "../models/ChartTypes";
 
 export abstract class BaseChart<TOptions extends ChartOptions, TData>
   implements Chart<TOptions, TData>

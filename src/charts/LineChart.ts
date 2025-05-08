@@ -183,6 +183,7 @@ export class LineChart extends BaseChart<LineChartOptions, XYDataPoint> {
       groupContent += createLine(x1, y1, x2, y2, {
         stroke: this.options.colors?.[0] || "#000",
         "stroke-width": this.options.lineWidth || 2,
+        class: "data-line",
       });
     }
 
