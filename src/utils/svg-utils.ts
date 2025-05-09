@@ -49,6 +49,19 @@ export function createCircle(
 }
 
 /**
+ * Creates a rectangle element
+ */
+export function createRectangle(
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  attributes: Record<string, string | number> = {}
+): string {
+  return createSvgElement('rect', { x, y, width, height, ...attributes });
+}
+
+/**
  * Creates a text element
  */
 export function createText(

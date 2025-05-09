@@ -50,6 +50,11 @@ export interface LineChartOptions extends AxialChartOptions {
   fillArea?: boolean;
 }
 
+export interface BarChartOptions extends AxialChartOptions {
+  barPadding?: number;
+  showValues?: boolean;
+}
+
 export interface Chart<TOptions = ChartOptions, TData = BaseDataPoint> {
   render(): string;
   updateData(data: TData[]): void;
