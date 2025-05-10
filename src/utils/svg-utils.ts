@@ -11,6 +11,15 @@ export function escapeText(text: string): string {
 }
 
 /**
+ * Parses an SVG string into an SVG element
+ */
+export function parseSvgString(svgString: string): SVGElement {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(svgString, "image/svg+xml");
+  return doc.documentElement as unknown as SVGElement;
+}
+
+/**
  * Creates an SVG element with the given attributes
  */
 export function createSvgElement(

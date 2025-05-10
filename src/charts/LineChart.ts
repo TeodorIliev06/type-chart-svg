@@ -157,11 +157,13 @@ export class LineChart extends AxialChart<LineChartOptions, XYDataPoint> {
     const { min: xMin, max: xMax } = this.getDataBounds(xValues, {
       minZero: false,
       adjustMin: false,
+      topPadding: 1,
     });
 
     const { min: yMin, max: yMax } = this.getDataBounds(yValues, {
       minZero: false,
-      topPadding: 1.1,
+      adjustMin: false,
+      topPadding: 1,
     });
 
     let svg = this.createSvgContainer();
@@ -189,12 +191,12 @@ export class LineChart extends AxialChart<LineChartOptions, XYDataPoint> {
     }
 
     if (this.options.showDots) {
-      this.data.forEach((point, i) => {
+      this.data.forEach((point) => {
         const cx = mapRange(point.x, xMin, xMax, 0, width);
         const cy = mapRange(point.y, yMin, yMax, height, 0);
 
         groupContent += createCircle(cx, cy, this.options.dotRadius || 4, {
-          fill: this.getColor(i),
+          fill: this.getColor(0),
         });
       });
     }

@@ -1,12 +1,6 @@
 import { LineChart } from "../charts/LineChart";
 import { XYDataPoint } from "../models/ChartTypes";
-
-// Helper function to parse SVG string into DOM element
-function parseSvgString(svgString: string): SVGElement {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(svgString, "image/svg+xml");
-  return doc.documentElement as unknown as SVGElement;
-}
+import { parseSvgString } from "../utils/svg-utils";
 
 describe("LineChart", () => {
   const sampleData: XYDataPoint[] = [
