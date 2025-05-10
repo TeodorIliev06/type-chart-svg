@@ -28,17 +28,6 @@ export class BarChart extends BaseChart<BarChartOptions, LabelValueDataPoint> {
     );
   }
 
-  private renderEmptyState(): string {
-    const { width, height } = this.options;
-
-    return createText(width / 2, height / 2, "No data to display", {
-      "text-anchor": "middle",
-      "dominant-baseline": "middle",
-      "font-size": "16px",
-      fill: "#666",
-    });
-  }
-
   private renderAxesAndGrid(): { axes: string; grid: string } {
     const { showAxes, showGrid, xAxisLabel, yAxisLabel } = this.options;
     const { width, height, x, y } = this.getInnerDimensions();
@@ -47,11 +36,8 @@ export class BarChart extends BaseChart<BarChartOptions, LabelValueDataPoint> {
     let { min, max } = findMinMax(values);
 
     min = min < 0 ? min : 0;
-
-    // Add padding to max value for better visuals
     max = max * 1.1;
 
-    // Generate nice tick values
     const ticks = calculateTicks(min, max, this.options.yAxisTicks || 5);
 
     let axes = "";
@@ -122,7 +108,6 @@ export class BarChart extends BaseChart<BarChartOptions, LabelValueDataPoint> {
 
   private renderBars(): string {
     const { width, height, x, y } = this.getInnerDimensions();
-    const { colors } = this.options;
 
     // Calculate bar width based on data length and padding
     const barCount = this.data.length;
@@ -139,7 +124,6 @@ export class BarChart extends BaseChart<BarChartOptions, LabelValueDataPoint> {
 
     this.data.forEach((dataPoint, i) => {
       const barX = x + i * availableWidth + (availableWidth - barWidth) / 2;
-      const colorIndex = i % colors!.length;
 
       // For positive values, bars go up from the bottom
       // For negative values, bars go down from the zero line
@@ -160,7 +144,7 @@ export class BarChart extends BaseChart<BarChartOptions, LabelValueDataPoint> {
       }
 
       barsGroup += createRectangle(barX, barY, barWidth, barHeight, {
-        fill: colors![colorIndex],
+        fill: this.getColor(i),
         stroke: "none",
       });
     });
@@ -171,7 +155,6 @@ export class BarChart extends BaseChart<BarChartOptions, LabelValueDataPoint> {
   private renderLabels(): string {
     const { width, height, x, y } = this.getInnerDimensions();
 
-    // Calculate label positioning
     const barCount = this.data.length;
     const availableWidth = width / barCount;
 

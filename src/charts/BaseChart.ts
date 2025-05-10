@@ -1,7 +1,15 @@
-import { Chart, ChartOptions, DEFAULT_MARGIN } from "../models/ChartTypes";
+import {
+  ChartOptions,
+  BaseDataPoint,
+  Chart,
+  DEFAULT_MARGIN,
+} from "../models/ChartTypes";
+import { createText } from "../utils/svg-utils";
 
-export abstract class BaseChart<TOptions extends ChartOptions, TData>
-  implements Chart<TOptions, TData>
+export abstract class BaseChart<
+  TOptions extends ChartOptions,
+  TData extends BaseDataPoint
+> implements Chart<TOptions, TData>
 {
   protected options: TOptions;
   protected data: TData[];
@@ -14,10 +22,9 @@ export abstract class BaseChart<TOptions extends ChartOptions, TData>
   ];
 
   constructor(options: TOptions, data: TData[] = []) {
-    // Set default options if not provided
     this.options = {
       ...options,
-      margin: options.margin || { ...DEFAULT_MARGIN },
+      margin: options.margin || DEFAULT_MARGIN,
       colors: options.colors || [...this.defaultColors],
     };
     this.data = data;
@@ -44,7 +51,11 @@ export abstract class BaseChart<TOptions extends ChartOptions, TData>
     const titleX = width / 2;
     const titleY = margin.top / 2;
 
-    return `<text x="${titleX}" y="${titleY}" text-anchor="middle" font-weight="bold" font-size="16">${this.options.title}</text>`;
+    return createText(titleX, titleY, this.options.title, {
+      "text-anchor": "middle",
+      "font-weight": "bold",
+      "font-size": "16px",
+    });
   }
 
   protected getInnerDimensions(): {
@@ -61,6 +72,23 @@ export abstract class BaseChart<TOptions extends ChartOptions, TData>
       x: margin.left,
       y: margin.top,
     };
+  }
+
+  protected renderEmptyState(message: string = "No data to display"): string {
+    const { width, height } = this.options;
+    return createText(width / 2, height / 2, message, {
+      "text-anchor": "middle",
+      "dominant-baseline": "middle",
+      "font-size": "16px",
+      fill: "#666",
+    });
+  }
+
+  protected getColor(index: number): string {
+    return (
+      this.options.colors?.[index % (this.options.colors?.length || 1)] ||
+      "#000"
+    );
   }
 
   public abstract render(): string;
