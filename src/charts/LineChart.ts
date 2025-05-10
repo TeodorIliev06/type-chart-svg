@@ -1,4 +1,4 @@
-import { BaseChart } from "./BaseChart";
+import { AxialChart } from "./AxialChart";
 import { XYDataPoint, LineChartOptions } from "../models/ChartTypes";
 import {
   createCircle,
@@ -6,22 +6,15 @@ import {
   createLine,
   createText,
 } from "../utils/svg-utils";
-import {
-  findMinMax,
-  mapRange,
-  calculateTicks,
-  formatNumber,
-} from "../utils/math-utils";
+import { mapRange, calculateTicks, formatNumber } from "../utils/math-utils";
 
-export class LineChart extends BaseChart<LineChartOptions, XYDataPoint> {
+export class LineChart extends AxialChart<LineChartOptions, XYDataPoint> {
   constructor(options: LineChartOptions, data: XYDataPoint[]) {
     super(
       {
         lineWidth: 2,
         showDots: true,
         dotRadius: 4,
-        showGrid: true,
-        yAxisTicks: 5,
         ...options,
       },
       data
@@ -160,8 +153,16 @@ export class LineChart extends BaseChart<LineChartOptions, XYDataPoint> {
     // Calculate scales
     const xValues = this.data.map((point) => point.x);
     const yValues = this.data.map((point) => point.y);
-    const { min: xMin, max: xMax } = findMinMax(xValues);
-    const { min: yMin, max: yMax } = findMinMax(yValues);
+
+    const { min: xMin, max: xMax } = this.getDataBounds(xValues, {
+      minZero: false,
+      adjustMin: false,
+    });
+
+    const { min: yMin, max: yMax } = this.getDataBounds(yValues, {
+      minZero: false,
+      topPadding: 1.1,
+    });
 
     let svg = this.createSvgContainer();
     svg += this.renderTitle();

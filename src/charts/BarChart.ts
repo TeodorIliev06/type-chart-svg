@@ -1,4 +1,4 @@
-import { BaseChart } from "./BaseChart";
+import { AxialChart } from "./AxialChart";
 import { BarChartOptions, LabelValueDataPoint } from "../models/ChartTypes";
 import {
   createLine,
@@ -6,22 +6,14 @@ import {
   createText,
   createGroup,
 } from "../utils/svg-utils";
-import {
-  findMinMax,
-  mapRange,
-  calculateTicks,
-  formatNumber,
-} from "../utils/math-utils";
+import { mapRange, calculateTicks, formatNumber } from "../utils/math-utils";
 
-export class BarChart extends BaseChart<BarChartOptions, LabelValueDataPoint> {
+export class BarChart extends AxialChart<BarChartOptions, LabelValueDataPoint> {
   constructor(options: BarChartOptions, data: LabelValueDataPoint[] = []) {
     super(
       {
         barPadding: 0.2,
         showValues: true,
-        showAxes: true,
-        showGrid: true,
-        yAxisTicks: 5,
         ...options,
       },
       data
@@ -33,10 +25,10 @@ export class BarChart extends BaseChart<BarChartOptions, LabelValueDataPoint> {
     const { width, height, x, y } = this.getInnerDimensions();
 
     const values = this.data.map((d) => d.value);
-    let { min, max } = findMinMax(values);
-
-    min = min < 0 ? min : 0;
-    max = max * 1.1;
+    const { min, max } = this.getDataBounds(values, {
+      minZero: true,
+      topPadding: 1.1,
+    });
 
     const ticks = calculateTicks(min, max, this.options.yAxisTicks || 5);
 
@@ -116,9 +108,10 @@ export class BarChart extends BaseChart<BarChartOptions, LabelValueDataPoint> {
     const barWidth = availableWidth * (1 - barPadding);
 
     const values = this.data.map((d) => d.value);
-    let { min, max } = findMinMax(values);
-    min = min < 0 ? min : 0;
-    max = max * 1.1;
+    const { min, max } = this.getDataBounds(values, {
+      minZero: true,
+      topPadding: 1.1,
+    });
 
     let barsGroup = "";
 
@@ -187,9 +180,10 @@ export class BarChart extends BaseChart<BarChartOptions, LabelValueDataPoint> {
     const availableWidth = width / barCount;
 
     const values = this.data.map((d) => d.value);
-    let { min, max } = findMinMax(values);
-    min = min < 0 ? min : 0;
-    max = max * 1.1;
+    const { min, max } = this.getDataBounds(values, {
+      minZero: true,
+      topPadding: 1.1,
+    });
 
     let valuesGroup = "";
 
