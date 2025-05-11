@@ -12,7 +12,7 @@ const data: XYDataPoint[] = [
     { x: 6, y: 8.3 },
     { x: 7, y: 7.5 },
     { x: 8, y: 9.2 },
-    { x: 9, y: 10.1 }
+    { x: 9, y: 10.0 }
 ];
 
 // Default options

@@ -41,14 +41,10 @@ export class LineChart extends AxialChart<LineChartOptions, XYDataPoint> {
     const xTicks = calculateTicks(xMin, xMax, 5);
     const yTicks = calculateTicks(yMin, yMax, this.options.yAxisTicks || 5);
 
+    const topYTick = this.getTopYTick(yTicks, yMin, yMax, height);
+
     // Draw X axis
     axesContent += createLine(0, height, width, height, {
-      stroke: "#000",
-      "stroke-width": 1,
-    });
-
-    // Draw Y axis
-    axesContent += createLine(0, 0, 0, height, {
       stroke: "#000",
       "stroke-width": 1,
     });
@@ -77,6 +73,11 @@ export class LineChart extends AxialChart<LineChartOptions, XYDataPoint> {
         "text-anchor": "end",
         "font-size": "12",
       });
+    });
+
+    axesContent += createLine(0, height, 0, topYTick, {
+      stroke: "#000",
+      "stroke-width": 1,
     });
 
     // Draw axis labels if provided
@@ -122,16 +123,16 @@ export class LineChart extends AxialChart<LineChartOptions, XYDataPoint> {
     const xTicks = calculateTicks(xMin, xMax, 5);
     const yTicks = calculateTicks(yMin, yMax, this.options.yAxisTicks || 5);
 
-    // Draw vertical grid lines
+    const topYTick = this.getTopYTick(yTicks, yMin, yMax, height);
+
     xTicks.forEach((tick) => {
       const x = mapRange(tick, xMin, xMax, 0, width);
-      gridContent += createLine(x, 0, x, height, {
+      gridContent += createLine(x, topYTick, x, height, {
         stroke: "#ddd",
         "stroke-width": 1,
       });
     });
 
-    // Draw horizontal grid lines
     yTicks.forEach((tick) => {
       const y = mapRange(tick, yMin, yMax, height, 0);
       gridContent += createLine(0, y, width, y, {
@@ -201,10 +202,8 @@ export class LineChart extends AxialChart<LineChartOptions, XYDataPoint> {
       });
     }
 
-    // Add axes last (so they appear on top)
     groupContent += this.renderAxes(xMin, xMax, yMin, yMax, width, height);
 
-    // Create main chart group with content
     svg += createGroup(
       {
         transform: `translate(${x}, ${y})`,

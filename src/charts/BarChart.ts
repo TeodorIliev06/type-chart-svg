@@ -35,6 +35,8 @@ export class BarChart extends AxialChart<BarChartOptions, LabelValueDataPoint> {
     let axes = "";
     let grid = "";
 
+    const topYTick = this.getTopYTick(ticks, min, max, y + height);
+
     if (showAxes) {
       // X-axis
       axes += createLine(x, y + height, x + width, y + height, {
@@ -42,26 +44,25 @@ export class BarChart extends AxialChart<BarChartOptions, LabelValueDataPoint> {
         "stroke-width": 1,
       });
 
-      // Y-axis
-      axes += createLine(x, y, x, y + height, {
-        stroke: "#333",
-        "stroke-width": 1,
-      });
-
       // Y-axis ticks and labels
       ticks.forEach((tick) => {
         const tickY = mapRange(tick, min, max, y + height, y);
+        if (tickY >= y && tickY <= y + height) {
+          axes += createLine(x - 5, tickY, x, tickY, {
+            stroke: "#333",
+            "stroke-width": 1,
+          });
+          axes += createText(x - 10, tickY, formatNumber(tick), {
+            "text-anchor": "end",
+            "dominant-baseline": "middle",
+            "font-size": "12px",
+          });
+        }
+      });
 
-        axes += createLine(x - 5, tickY, x, tickY, {
-          stroke: "#333",
-          "stroke-width": 1,
-        });
-
-        axes += createText(x - 10, tickY, formatNumber(tick), {
-          "text-anchor": "end",
-          "dominant-baseline": "middle",
-          "font-size": "12px",
-        });
+      axes += createLine(x, y + height, x, topYTick, {
+        stroke: "#333",
+        "stroke-width": 1,
       });
 
       if (xAxisLabel) {

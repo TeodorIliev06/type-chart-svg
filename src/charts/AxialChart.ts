@@ -1,5 +1,5 @@
 import { BaseDataPoint, AxialChartOptions } from "../models/ChartTypes";
-import { findMinMax } from "../utils/math-utils";
+import { findMinMax, mapRange } from "../utils/math-utils";
 import { BaseChart } from "./BaseChart";
 
 /**
@@ -44,5 +44,20 @@ export abstract class AxialChart<
     max = max * topPadding;
 
     return { min, max };
+  }
+
+  /**
+   * Helper to get the topmost visible yTick
+   */
+  protected getTopYTick(
+    yTicks: number[],
+    yMin: number,
+    yMax: number,
+    height: number
+  ): number {
+    const visibleYTicks = yTicks
+      .map((tick) => mapRange(tick, yMin, yMax, height, 0))
+      .filter((y) => y >= 0 && y <= height);
+    return visibleYTicks.length > 0 ? Math.min(...visibleYTicks) : height;
   }
 }
