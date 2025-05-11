@@ -92,3 +92,18 @@ export function formatNumber(num: number): string {
   
   return (num / 1000000000).toFixed(1) + 'B';
 }
+
+/**
+ * Calculates the coordinates of a point on a circle
+ */
+export function pointOnCircle(
+  centerX: number,
+  centerY: number,
+  radius: number,
+  angleInRadians: number
+): { x: number; y: number } {
+  return {
+    x: centerX + radius * Math.cos(angleInRadians),
+    y: centerY + radius * Math.sin(angleInRadians)
+  };
+} 

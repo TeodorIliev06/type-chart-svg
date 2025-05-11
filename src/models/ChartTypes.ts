@@ -55,6 +55,15 @@ export interface BarChartOptions extends AxialChartOptions {
   showValues?: boolean;
 }
 
+export interface PieChartOptions extends ChartOptions {
+  innerRadius?: number;
+  showLabels?: boolean;
+  showValues?: boolean;
+  showLegend?: boolean;
+  startAngle?: number;
+  endAngle?: number;
+}
+
 export interface Chart<TOptions = ChartOptions, TData = BaseDataPoint> {
   render(): string;
   updateData(data: TData[]): void;
