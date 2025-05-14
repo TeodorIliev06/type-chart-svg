@@ -22,8 +22,7 @@ export class PieChart extends BaseChart<PieChartOptions, LabelValueDataPoint> {
     startAngle: number,
     endAngle: number,
     radius: number,
-    color: string,
-    index: number
+    color: string
   ): string {
     // Convert angles to radians
     const startRad = (startAngle * Math.PI) / 180;
@@ -67,8 +66,7 @@ export class PieChart extends BaseChart<PieChartOptions, LabelValueDataPoint> {
         currentAngle,
         endAngle,
         radius,
-        this.getColor(index),
-        index
+        this.getColor(index)
       );
 
       currentAngle = endAngle;
