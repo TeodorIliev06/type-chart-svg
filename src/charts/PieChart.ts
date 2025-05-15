@@ -81,7 +81,7 @@ export class PieChart extends BaseChart<PieChartOptions, LabelValueDataPoint> {
         "font-size": "14px",
         fill: "#fff",
         "font-weight": "bold",
-        "pointer-events": "none"
+        "pointer-events": "none",
       });
 
       // Draw label outside with leader line
@@ -93,7 +93,7 @@ export class PieChart extends BaseChart<PieChartOptions, LabelValueDataPoint> {
         "dominant-baseline": "middle",
         "font-size": "14px",
         fill: "#333",
-        "pointer-events": "none"
+        "pointer-events": "none",
       });
 
       currentAngle = endAngle;
