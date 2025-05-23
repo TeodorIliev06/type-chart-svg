@@ -1,9 +1,11 @@
 import { BaseChart } from "./BaseChart";
 import { PieChartOptions, LabelValueDataPoint } from "../models/ChartTypes";
-import { createGroup, createPath, createText } from "../utils/svg-utils";
+import { createGroup, createPath, createText, createRectangle } from "../utils/svg-utils";
 import { pointOnCircle } from "../utils/math-utils";
 
 export class PieChart extends BaseChart<PieChartOptions, LabelValueDataPoint> {
+  private total: number;
+
   constructor(options: PieChartOptions, data: LabelValueDataPoint[] = []) {
     super(
       {
@@ -16,6 +18,12 @@ export class PieChart extends BaseChart<PieChartOptions, LabelValueDataPoint> {
       },
       data
     );
+    this.total = this.data.reduce((sum, item) => sum + item.value, 0);
+  }
+
+  private getPercentageText(value: number): string {
+    const percentage = value / this.total;
+    return `${Math.round(percentage * 100)}%`;
   }
 
   private renderSlice(
@@ -39,6 +47,39 @@ export class PieChart extends BaseChart<PieChartOptions, LabelValueDataPoint> {
     });
   }
 
+  private renderLegend(): string {
+    if (!this.options.showLegend) return "";
+
+    const legendPadding = 10;
+    const legendItemHeight = 20;
+    const legendItemSpacing = 5;
+    const colorBoxSize = 12;
+    const legendX = this.options.margin?.left || 0;
+    const legendY = this.options.height - (this.options.margin?.bottom || 0) - (this.data.length * (legendItemHeight + legendItemSpacing));
+
+    let legendItems = "";
+    
+    this.data.forEach((item, index) => {
+      const y = legendY + index * (legendItemHeight + legendItemSpacing);
+
+      legendItems += createRectangle(legendX, y, colorBoxSize, colorBoxSize, {
+        fill: this.getColor(index),
+        stroke: "#333",
+        "stroke-width": 1,
+      });
+
+      const labelX = legendX + colorBoxSize + legendPadding;
+      legendItems += createText(labelX, y + colorBoxSize / 2, `${item.label} (${this.getPercentageText(item.value)})`, {
+        "text-anchor": "start",
+        "dominant-baseline": "middle",
+        "font-size": "12px",
+        fill: "#333",
+      });
+    });
+
+    return createGroup({}, legendItems);
+  }
+
   public render(): string {
     if (this.data.length === 0) {
       return this.createSvgContainer() + this.renderEmptyState() + "</svg>";
@@ -50,8 +91,6 @@ export class PieChart extends BaseChart<PieChartOptions, LabelValueDataPoint> {
     const labelRadius = radius * 1.15;
     const leaderRadius = radius * 1.02;
 
-    const total = this.data.reduce((sum, item) => sum + item.value, 0);
-
     let slices = "";
     let percentTexts = "";
     let labelLines = "";
@@ -59,8 +98,7 @@ export class PieChart extends BaseChart<PieChartOptions, LabelValueDataPoint> {
     let currentAngle = this.options.startAngle || 0;
 
     this.data.forEach((item, index) => {
-      const percentage = item.value / total;
-      const percentText = `${Math.round(percentage * 100)}%`;
+      const percentage = item.value / this.total;
       const sliceAngle = percentage * (this.options.endAngle || 360);
       const endAngle = currentAngle + sliceAngle;
 
@@ -75,7 +113,7 @@ export class PieChart extends BaseChart<PieChartOptions, LabelValueDataPoint> {
       const midAngle = (currentAngle + endAngle) / 2;
       const midRad = (midAngle * Math.PI) / 180;
       const percentPos = pointOnCircle(0, 0, percentRadius, midRad);
-      percentTexts += createText(percentPos.x, percentPos.y, percentText, {
+      percentTexts += createText(percentPos.x, percentPos.y, this.getPercentageText(item.value), {
         "text-anchor": "middle",
         "dominant-baseline": "middle",
         "font-size": "14px",
@@ -106,6 +144,8 @@ export class PieChart extends BaseChart<PieChartOptions, LabelValueDataPoint> {
       slices + labelLines + percentTexts + outsideLabels
     );
 
-    return `${this.createSvgContainer()}${this.renderTitle()}${group}</svg>`;
+    const legend = this.renderLegend();
+
+    return `${this.createSvgContainer()}${this.renderTitle()}${group}${legend}</svg>`;
   }
 }
