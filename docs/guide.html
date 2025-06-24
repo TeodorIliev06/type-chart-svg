@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Build Your Own Chart - Guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Build Your Own Chart</h1>
+    <p>This guide will help you create your own SVG chart using the TypeScript chart library.</p>
+    <h2>1. Set Up Your HTML</h2>
+    <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;title&gt;My Chart&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id="chart"&gt;&lt;/div&gt;
+  &lt;script type="module" src="my-chart.ts"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+    <h2>2. Create Your Chart Script</h2>
+    <p>In <code>my-chart.ts</code> (or any .ts file), import the chart you want to use and provide your data:</p>
+    <pre><code>import { PieChart } from '../src/charts/PieChart';
+import { LabelValueDataPoint } from '../src/models/ChartTypes';
+
+const data: LabelValueDataPoint[] = [
+  { label: 'A', value: 10 },
+  { label: 'B', value: 20 },
+  { label: 'C', value: 30 },
+];
+
+const options = {
+  width: 600,
+  height: 400,
+  title: 'My Custom Pie Chart',
+  showLegend: true,
+};
+
+const chart = new PieChart(options, data);
+const chartContainer = document.getElementById('chart');
+if (chartContainer) {
+  chartContainer.innerHTML = chart.render();
+}
+</code></pre>
+    <h2>3. Customize Your Chart</h2>
+    <ul>
+      <li>Change <code>options</code> to adjust size, colors, title, etc.</li>
+      <li>Use different chart types (BarChart, LineChart, etc.)</li>
+      <li>Style your chart with CSS for a custom look</li>
+    </ul>
+    <h2>4. Download Your Chart</h2>
+    <p>To let users download the SVG, add a button and use this function:</p>
+    <pre><code>function saveSvgToFile(svg: string, filename: string) {
+  const blob = new Blob([svg], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+</code></pre>
+    <h2>5. Explore More</h2>
+    <ul>
+      <li>Check out the <a href="../index.html">gallery</a> for more examples</li>
+      <li>See more in the <a href="../README.md">README</a> for project details</li>
+      <li>Look at the <code>examples/</code> folder for ready-to-use demos</li>
+    </ul>
+  </div>
+</body>
+</html> 

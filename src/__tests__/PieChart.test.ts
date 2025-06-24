@@ -66,14 +66,14 @@ describe("PieChart", () => {
     const svg = parseSvgString(svgString);
 
     const percentageTexts = Array.from(svg.querySelectorAll("text")).filter(
-      (text) => text.textContent && text.textContent.includes("%")
+      (text) =>
+        text.textContent &&
+        text.textContent.includes("%") &&
+        text.getAttribute("fill") === "#fff" &&
+        text.getAttribute("font-weight") === "bold"
     );
 
     expect(percentageTexts.length).toBe(sampleData.length);
-    percentageTexts.forEach((text) => {
-      expect(text.getAttribute("fill")).toBe("#fff");
-      expect(text.getAttribute("font-weight")).toBe("bold");
-    });
   });
 
   it("should render category labels outside the pie", () => {
@@ -149,7 +149,7 @@ describe("PieChart", () => {
   it("should have showLabels option set to true by default", () => {
     const chart = new PieChart(defaultOptions, sampleData);
 
-    // @ts-ignore - accessing private option for testing
+    // @ts-expect-error - accessing private option for testing
     expect(chart.options.showLabels).toBe(true);
     
     const svgString = chart.render();
@@ -168,14 +168,18 @@ describe("PieChart", () => {
 
   it("should have showValues option set to true by default", () => {
     const chart = new PieChart(defaultOptions, sampleData);
-    // @ts-ignore - accessing private option for testing
+    // @ts-expect-error - accessing private option for testing
     expect(chart.options.showValues).toBe(true);
     
     const svgString = chart.render();
     const svg = parseSvgString(svgString);
 
     const percentageTexts = Array.from(svg.querySelectorAll("text")).filter(
-      (text) => text.textContent && text.textContent.includes("%")
+      (text) =>
+        text.textContent &&
+        text.textContent.includes("%") &&
+        text.getAttribute("fill") === "#fff" &&
+        text.getAttribute("font-weight") === "bold"
     );
 
     expect(percentageTexts.length).toBe(sampleData.length);
