@@ -1,5 +1,6 @@
 import { PieChart } from '../../src/charts/PieChart';
 import { LabelValueDataPoint } from '../../src/models/ChartTypes';
+import { saveSvgToFile } from '../../src/utils/svg-utils';
 
 const data: LabelValueDataPoint[] = [
     { label: 'Category A', value: 30 },
@@ -26,17 +27,10 @@ if (chartContainer) {
     chartContainer.innerHTML = chart.render();
 }
 
-function saveSvgToFile(svg: string, filename: string) {
-    const blob = new Blob([svg], { type: 'image/svg+xml' });
-    const url = URL.createObjectURL(blob);
-    
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+const downloadBtn = document.getElementById('download-btn');
+if (downloadBtn && chartContainer) {
+  downloadBtn.addEventListener('click', () => {
+    const svg = chart.render();
+    saveSvgToFile(svg, 'my-chart.svg');
+  });
 }
-
-saveSvgToFile(chart.render(), 'pie-chart.svg'); 

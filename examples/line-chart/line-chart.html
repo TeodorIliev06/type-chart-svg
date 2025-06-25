@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Line Chart Example</title>
-    <link rel="stylesheet" href="line-chart.css">
+    <link rel="stylesheet" href="../common.css">
 </head>
 <body>
-    <div class="chart-container" id="chart"></div>
-    <script type="module" src="/examples/line-chart/line-chart.ts"></script>
-    <!-- <script type="module" src="../dist/examples/line-chart-example.js"></script> -->
+    <div class="container">
+        <div id="chart"></div>
+        <button class="download-btn" id="download-btn">Download SVG</button>
+    </div>
+    <script type="module" src="line-chart.ts"></script>
 </body>
 </html> 

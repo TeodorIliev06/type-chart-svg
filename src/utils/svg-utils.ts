@@ -39,6 +39,21 @@ export function createSvgElement(
 }
 
 /**
+ * Saves an SVG string as a file
+ */
+export function saveSvgToFile(svg: string, filename: string) {
+  const blob = new Blob([svg], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+/**
  * Creates a path element
  */
 export function createPath(d: string, attributes: Record<string, string | number> = {}): string {

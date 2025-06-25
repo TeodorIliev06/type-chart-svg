@@ -1,5 +1,6 @@
 import { LineChart } from '../../src/charts/LineChart';
 import { XYDataPoint } from '../../src/models/ChartTypes';
+import { saveSvgToFile } from '../../src/utils/svg-utils';
 
 // Sample data
 const data: XYDataPoint[] = [
@@ -38,19 +39,10 @@ if (chartContainer) {
     chartContainer.innerHTML = chart.render();
 }
 
-// Function to save SVG to file
-function saveSvgToFile(svg: string, filename: string) {
-    const blob = new Blob([svg], { type: 'image/svg+xml' });
-    const url = URL.createObjectURL(blob);
-    
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+const downloadBtn = document.getElementById('download-btn');
+if (downloadBtn && chartContainer) {
+  downloadBtn.addEventListener('click', () => {
+    const svg = chart.render();
+    saveSvgToFile(svg, 'my-chart.svg');
+  });
 }
-
-// Save the chart
-saveSvgToFile(chart.render(), 'line-chart.svg'); 
