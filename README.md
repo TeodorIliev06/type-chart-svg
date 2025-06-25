@@ -1,5 +1,7 @@
 # TypeScript SVG Chart Gallery
 
+[Live Demo on Vercel](https://type-chart-svg.vercel.app/)
+
 _Elegant, educational, and minimal charting library and gallery in TypeScript + SVG._
 
 ![Landing Page Screenshot](assets/landing-preview.png)

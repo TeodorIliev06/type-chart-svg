@@ -198,6 +198,7 @@ export class LineChart extends AxialChart<LineChartOptions, XYDataPoint> {
 
         groupContent += createCircle(cx, cy, this.options.dotRadius || 4, {
           fill: this.getColor(0),
+          class: 'chart-dot',
         });
       });
     }
@@ -214,5 +215,29 @@ export class LineChart extends AxialChart<LineChartOptions, XYDataPoint> {
     svg += "</svg>";
 
     return svg;
+  }
+
+  public attachEventListeners(svg: SVGSVGElement, tooltip: HTMLElement, data: XYDataPoint[]): void {
+    if (svg && tooltip) {
+      const dots = svg.querySelectorAll<SVGCircleElement>('.chart-dot');
+      dots.forEach((dot, i) => {
+        dot.style.transition = 'fill 0.2s';
+        dot.addEventListener('mouseenter', (e) => {
+          dot.setAttribute('fill', '#555');
+          tooltip.style.display = 'block';
+          tooltip.textContent = `(${data[i].x}, ${data[i].y})`;
+        });
+        dot.addEventListener('mousemove', (e) => {
+          const mouseEvent = e as MouseEvent;
+          const rect = svg.getBoundingClientRect();
+          tooltip.style.left = (mouseEvent.clientX - rect.left + 8) + 'px';
+          tooltip.style.top = (mouseEvent.clientY - rect.top - tooltip.offsetHeight - 4) + 'px';
+        });
+        dot.addEventListener('mouseleave', () => {
+          dot.setAttribute('fill', this.getColor(0));
+          tooltip.style.display = 'none';
+        });
+      });
+    }
   }
 }

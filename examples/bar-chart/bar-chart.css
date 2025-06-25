@@ -1,1 +1,9 @@
 /* Bar chart specific styles only */
+
+.bar {
+  fill: #2196F3 !important;
+}
+
+rect {
+  fill: #2196F3 !important;
+}

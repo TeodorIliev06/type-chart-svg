@@ -7,6 +7,7 @@
   border: 1px solid #e0e0e0;
   padding: 40px 32px 32px 32px;
   text-align: center;
+  position: relative;
 }
 
 h1 {
@@ -38,4 +39,18 @@ button.download-btn {
 button.download-btn:hover {
   background: #444;
   color: #fff;
+}
+
+
+#tooltip {
+  position: absolute;
+  background: white;
+  border: 1px solid black;
+  padding: 5px;
+  pointer-events: none;
+  z-index: 1000;
+  display: none;
+  font-size: 14px;
+  color: #111;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }

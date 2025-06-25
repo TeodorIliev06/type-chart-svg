@@ -44,6 +44,7 @@ export class PieChart extends BaseChart<PieChartOptions, LabelValueDataPoint> {
       fill: color,
       stroke: "white",
       "stroke-width": 1,
+      class: "pie-slice",
     });
   }
 
@@ -147,5 +148,30 @@ export class PieChart extends BaseChart<PieChartOptions, LabelValueDataPoint> {
     const legend = this.renderLegend();
 
     return `${this.createSvgContainer()}${this.renderTitle()}${group}${legend}</svg>`;
+  }
+
+  public attachEventListeners(svg: SVGSVGElement, tooltip: HTMLElement, data: LabelValueDataPoint[]): void {
+    if (svg && tooltip) {
+      const slices = svg.querySelectorAll<SVGPathElement>('.pie-slice');
+      slices.forEach((slice, i) => {
+        slice.style.transition = 'fill 0.2s';
+        slice.addEventListener('mouseenter', (e) => {
+          slice.setAttribute('fill', '#555');
+          tooltip.style.display = 'block';
+          const percent = ((data[i].value / this.total) * 100).toFixed(1);
+          tooltip.textContent = `${data[i].label}: ${data[i].value} (${percent}%)`;
+        });
+        slice.addEventListener('mousemove', (e) => {
+          const mouseEvent = e as MouseEvent;
+          const rect = svg.getBoundingClientRect();
+          tooltip.style.left = (mouseEvent.clientX - rect.left + 8) + 'px';
+          tooltip.style.top = (mouseEvent.clientY - rect.top - tooltip.offsetHeight - 4) + 'px';
+        });
+        slice.addEventListener('mouseleave', () => {
+          slice.setAttribute('fill', this.getColor(i));
+          tooltip.style.display = 'none';
+        });
+      });
+    }
   }
 }

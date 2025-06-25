@@ -32,6 +32,14 @@ const chart = new BarChart(options, data);
 const chartContainer = document.getElementById('chart');
 if (chartContainer) {
     chartContainer.innerHTML = chart.render();
+
+    const svg = chartContainer.querySelector('svg');
+    const tooltip = document.getElementById('tooltip');
+    
+    // Attach event listeners for interactivity
+    if (svg && tooltip) {
+        chart.attachEventListeners(svg, tooltip, data);
+    }
 }
 
 const downloadBtn = document.getElementById('download-btn');

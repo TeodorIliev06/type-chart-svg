@@ -140,6 +140,7 @@ export class BarChart extends AxialChart<BarChartOptions, LabelValueDataPoint> {
       barsGroup += createRectangle(barX, barY, barWidth, barHeight, {
         fill: this.getColor(i),
         stroke: "none",
+        class: "bar",
       });
     });
 
@@ -237,5 +238,33 @@ export class BarChart extends AxialChart<BarChartOptions, LabelValueDataPoint> {
       ${labels}
       ${values}
     </svg>`;
+  }
+
+  public attachEventListeners(svg: SVGSVGElement, tooltip: HTMLElement, data: LabelValueDataPoint[]): void {
+    if (svg && tooltip) {
+      const bars = svg.querySelectorAll<SVGRectElement>('.bar');
+      console.log('Found bars:', bars.length);
+      bars.forEach((bar, i) => {
+        bar.style.transition = 'fill 0.2s';
+
+        bar.addEventListener('mouseenter', (e) => {
+          bar.setAttribute('fill', '#555');
+          tooltip.style.display = 'block';
+          tooltip.textContent = `${data[i].label}: ${data[i].value}`;
+        });
+
+        bar.addEventListener('mousemove', (e) => {
+          const mouseEvent = e as MouseEvent;
+          const rect = svg.getBoundingClientRect();
+          tooltip.style.left = (mouseEvent.clientX - rect.left + 8) + 'px';
+          tooltip.style.top = (mouseEvent.clientY - rect.top - tooltip.offsetHeight + 8) + 'px';
+        });
+
+        bar.addEventListener('mouseleave', () => {
+          bar.setAttribute('fill', '#2196F3');
+          tooltip.style.display = 'none';
+        });
+      });
+    }
   }
 }
